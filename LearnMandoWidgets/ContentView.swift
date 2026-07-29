@@ -10,12 +10,12 @@ import WidgetKit
 import UIKit
 
 struct ContentView: View {
-    @State private var currentIndex = 0
+    @State private var currentIndex = SharedDataManager.shared.getCurrentWordIndex()
     @State private var isFavorite = false
     @State private var searchText: String = ""
 
     var currentWord: MandarinWord {
-        MandarinWord.sampleWords[currentIndex]
+        SharedDataManager.shared.getCurrentWord()
     }
 
     // Normalizes strings by removing diacritics and lowercasing for pinyin/english comparison
@@ -33,9 +33,17 @@ struct ContentView: View {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !query.isEmpty else { return [] }
 
+        // Prefer database-backed search when available
+        let dbResults = DatabaseManager.shared.search(query)
+        if !dbResults.isEmpty {
+            return dbResults.map { DBRes in
+                SearchResult(id: DBRes.index, word: DBRes.word)
+            }
+        }
+
+        // Fallback (in-memory) behavior
         let qNorm = normalized(query)
         return MandarinWord.sampleWords.enumerated().compactMap { (idx, word) in
-            // Match by exact character (Chinese), or normalized pinyin or english
             if word.character.contains(query) { return SearchResult(id: idx, word: word) }
             if normalized(word.pinyin).contains(qNorm) { return SearchResult(id: idx, word: word) }
             if normalized(word.english).contains(qNorm) { return SearchResult(id: idx, word: word) }
@@ -60,7 +68,7 @@ struct ContentView: View {
                             Text("Mandarin Learning")
                                 .font(.title2)
                                 .fontWeight(.semibold)
-                            Text("Word \(currentIndex + 1) of \(MandarinWord.sampleWords.count)")
+                            Text("Word \(SharedDataManager.shared.getCurrentWordIndex() + 1) of \(max(1, DatabaseManager.shared.wordCount()))")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -111,6 +119,7 @@ struct ContentView: View {
 
                                 Text(currentWord.character)
                                     .font(.system(size: 64, weight: .bold, design: .default))
+                                    .foregroundStyle(.primary)
                                     .minimumScaleFactor(0.5)
                                     .lineLimit(1)
                             }
@@ -125,6 +134,7 @@ struct ContentView: View {
                                     Text(currentWord.pinyin)
                                         .font(.title3)
                                         .fontWeight(.semibold)
+                                        .foregroundStyle(.primary)
                                 }
 
                                 VStack(spacing: 4) {
@@ -140,7 +150,7 @@ struct ContentView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding(25)
-                        .background(.white)
+                        .background(Color(.systemBackground))
                         .cornerRadius(15)
                         .shadow(radius: 5)
                         .padding(.horizontal)
@@ -177,6 +187,8 @@ struct ContentView: View {
             }
             .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search character, pinyin or English")
             .onAppear {
+                // Sync UI state with shared data
+                currentIndex = SharedDataManager.shared.getCurrentWordIndex()
                 updateUI()
             }
             .onChange(of: currentIndex) {
@@ -204,7 +216,8 @@ struct ContentView: View {
 
     private func nextWord() {
         withAnimation {
-            currentIndex = (currentIndex + 1) % MandarinWord.sampleWords.count
+            let count = max(1, DatabaseManager.shared.wordCount())
+            currentIndex = (SharedDataManager.shared.getCurrentWordIndex() + 1) % count
             SharedDataManager.shared.setCurrentWordIndex(currentIndex)
             SharedDataManager.shared.setLastUpdatedDate()
             WidgetCenter.shared.reloadAllTimelines()
@@ -213,7 +226,9 @@ struct ContentView: View {
 
     private func previousWord() {
         withAnimation {
-            currentIndex = currentIndex == 0 ? MandarinWord.sampleWords.count - 1 : currentIndex - 1
+            let count = max(1, DatabaseManager.shared.wordCount())
+            let current = SharedDataManager.shared.getCurrentWordIndex()
+            currentIndex = current == 0 ? count - 1 : current - 1
             SharedDataManager.shared.setCurrentWordIndex(currentIndex)
             SharedDataManager.shared.setLastUpdatedDate()
             WidgetCenter.shared.reloadAllTimelines()

@@ -38,11 +38,15 @@ class SharedDataManager {
     
     func getCurrentWord() -> MandarinWord {
         let index = getCurrentWordIndex()
+        if let dbWord = DatabaseManager.shared.word(at: index) {
+            return dbWord
+        }
         return MandarinWord.sampleWords[index % MandarinWord.sampleWords.count]
     }
     
     func setRandomWord() {
-        let randomIndex = Int.random(in: 0..<MandarinWord.sampleWords.count)
+        let count = max(1, DatabaseManager.shared.wordCount())
+        let randomIndex = Int.random(in: 0..<count)
         setCurrentWordIndex(randomIndex)
     }
     

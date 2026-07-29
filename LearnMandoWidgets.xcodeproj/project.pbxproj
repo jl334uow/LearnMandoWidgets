@@ -10,6 +10,8 @@
 		D04611B230170B4400E20797 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D04611B130170B4400E20797 /* WidgetKit.framework */; };
 		D04611B430170B4400E20797 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D04611B330170B4400E20797 /* SwiftUI.framework */; };
 		D04611C130170B4500E20797 /* MandoWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D04611AF30170B4400E20797 /* MandoWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D05AD37430186EF900A8A048 /* hsk_dictionary.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = D05AD37330186EF900A8A048 /* hsk_dictionary.sqlite */; };
+		D05AD37530186EF900A8A048 /* hsk_dictionary.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = D05AD37330186EF900A8A048 /* hsk_dictionary.sqlite */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +44,7 @@
 		D04611B130170B4400E20797 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		D04611B330170B4400E20797 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		D04611CE30171D0200E20797 /* MandoWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MandoWidgetExtension.entitlements; sourceTree = "<group>"; };
+		D05AD37330186EF900A8A048 /* hsk_dictionary.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = hsk_dictionary.sqlite; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -93,6 +96,7 @@
 		D046119230170A5D00E20797 = {
 			isa = PBXGroup;
 			children = (
+				D05AD37330186EF900A8A048 /* hsk_dictionary.sqlite */,
 				D04611CE30171D0200E20797 /* MandoWidgetExtension.entitlements */,
 				D046119D30170A5D00E20797 /* LearnMandoWidgets */,
 				D04611B530170B4400E20797 /* MandoWidget */,
@@ -211,6 +215,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D05AD37430186EF900A8A048 /* hsk_dictionary.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,6 +223,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D05AD37530186EF900A8A048 /* hsk_dictionary.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
