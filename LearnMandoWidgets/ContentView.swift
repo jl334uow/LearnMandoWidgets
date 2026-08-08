@@ -137,7 +137,7 @@ struct ContentView: View {
                                         .foregroundStyle(.primary)
                                 }
 
-                                VStack(spacing: 4) {
+                                VStack(alignment: .leading, spacing: 4) {
                                     Text("English")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
@@ -145,7 +145,10 @@ struct ContentView: View {
                                         .font(.title2)
                                         .fontWeight(.semibold)
                                         .foregroundStyle(.blue)
+                                        .lineLimit(nil)
+                                        .fixedSize(horizontal: false, vertical: true)
                                 }
+                                .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
                         .frame(maxWidth: .infinity)
