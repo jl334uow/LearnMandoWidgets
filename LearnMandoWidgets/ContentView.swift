@@ -15,7 +15,10 @@ struct ContentView: View {
     @State private var searchText: String = ""
 
     var currentWord: MandarinWord {
-        SharedDataManager.shared.getCurrentWord()
+        // Explicitly reference currentIndex to create a SwiftUI dependency
+        // This ensures the view refreshes when currentIndex changes
+        _ = currentIndex
+        return SharedDataManager.shared.getCurrentWord()
     }
 
     // Normalizes strings by removing diacritics and lowercasing for pinyin/english comparison
